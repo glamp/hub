@@ -40,14 +40,24 @@ server.listen(app.get('port'), function(){
 var io = require('socket.io').listen(server, { log: false })
 
 io.sockets.on("connection", function(socket) {
-    var runDocker = "sudo docker run -t node-sci"
-    exec(runDocker, function(err, stdout, stderr) {
+    var createContainer = "sudo docker run -t node-sci"
+    exec(createContainer, function(err, stdout, stderr) {
         socket.id = stdout;
         console.log("the guys id is: " + socket.id);
     });    
     
     socket.on("hello", function(data) {
         console.log(data);
+    });
+    socket.on("disconnect", function() {
+        var killContainer = "sudo docker kill " + socket.id;
+        exec(killContainer, function(err, stdout, stderr) {
+            if (err) {
+                console.log("error killing container for: " + socket.id);
+            } else {
+                console.log(socket.id + " has left the building!");
+            }
+        });
     });
 });
 
