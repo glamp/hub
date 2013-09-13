@@ -9,6 +9,7 @@
     "express": "3.3.4",
     "ejs": "*",
     "underscore": "~1.5.2",
-    "socket.io": "~0.9.16"
+    "socket.io": "~0.9.16",
+    "uuid": "~1.4.1"
   }
 }

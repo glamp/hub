@@ -5,9 +5,10 @@
 
 var express = require('express')
   , routes = require('./routes')
-  , user = require('./routes/user')
   , http = require('http')
-  , path = require('path');
+  , path = require('path')
+  , uuid = require('uuid')
+  , exec = require("child_process").exec;
 
 var app = express();
 
@@ -30,8 +31,23 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
-app.get('/users', user.list);
 
-http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+var server = require('http').createServer(app);
+server.listen(app.get('port'), function(){
+  console.log("Express server listening on port " + app.get('port'));
 });
+
+var io = require('socket.io').listen(server, { log: false })
+
+io.sockets.on("connection", function(socket) {
+    var runDocker = "sudo docker run -t node-sci"
+    exec(runDocker, function(err, stdout, stderr) {
+        socket.id = stdout;
+        console.log("the guys id is: " + socket.id);
+    });    
+    
+    socket.on("hello", function(data) {
+        console.log(data);
+    });
+});
+
