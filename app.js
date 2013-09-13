@@ -40,7 +40,7 @@ server.listen(app.get('port'), function(){
 var io = require('socket.io').listen(server, { log: false })
 
 io.sockets.on("connection", function(socket) {
-    var createContainer = "sudo docker run -t node-sci"
+    var createContainer = "sudo docker run -d pythonenv"
     exec(createContainer, function(err, stdout, stderr) {
         socket.id = stdout;
         console.log("the guys id is: " + socket.id);

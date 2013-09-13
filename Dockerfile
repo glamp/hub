@@ -5,7 +5,7 @@ RUN add-apt-repository ppa:chris-lea/node.js
 RUN apt-get update
 RUN apt-get -y install nodejs
 
-ADD . /node-sci
+ADD . /hub
 EXPOSE 3000
-#RUN cd node-sci; node app.js
+CMD cd hub; node app.js
 
