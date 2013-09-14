@@ -51,8 +51,7 @@ io.sockets.on("connection", function(socket) {
     var createContainer = "sudo docker run -p " + port + ":3000 -d pythonenv"
     socket.containerid = $(createContainer);
 
-    //socket.emit('ready', { id: socket.containerid, status: "provisioned" }) ;
-    
+    socket.emit('ready', { id: socket.containerid, status: "provisioned" }) ;
     console.log(socket.containerid);
     
     socket.on("code", function(data) {
@@ -77,9 +76,7 @@ io.sockets.on("connection", function(socket) {
              });
              res.on('end', function() {
                  var result = JSON.parse(responseString);
-                 console.log(result);
-                 console.log("why is this not emitting?");
-                 socket.emit("result", JSON.stringify(result));
+                 socket.emit("result", result);
              });
         });
         req.write(payload);
