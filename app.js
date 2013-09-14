@@ -50,8 +50,10 @@ io.sockets.on("connection", function(socket) {
     socket.port = port;
     var createContainer = "sudo docker run -p " + port + ":3000 -d pythonenv"
     socket.id = $(createContainer);
+
+    socket.emit('ready', { id: socket.id, status: "provisioned" }) ;
+    
     console.log(socket.id);
-        //socket.container = io.connect("http://localhost:" + socket.port);    
     
     socket.on("code", function(data) {
         console.log(data);
