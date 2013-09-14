@@ -34,7 +34,8 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-app.get('/', function(req, res) {
+app.get('/:lang', function(req, res) {
+    var lang = req.params.lang || "python";
     res.render("terminal");
 });
 
