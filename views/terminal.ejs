@@ -33,7 +33,6 @@
       });
 
       socket.on("result", function(data) {
-        console.log(data);
         jqconsole.Write(data.result + '\n', 'jqconsole-output');
       });
 
