@@ -14,7 +14,7 @@
 	  	<div id="console"></div>
   		<button id="exec-code">Send</button>
   	</div>
-    <script>
+    <script type="text/javascript">
       var socket = io.connect();
 
       socket.on("connect", function() {
@@ -55,7 +55,7 @@
         	jqconsole.Write(code + "\n\n", 'jqconsole-input');
         	return false;
         })
-      });
+       });
     </script>
 	
 	</body>
