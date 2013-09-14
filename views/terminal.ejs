@@ -18,6 +18,15 @@
 
     <script type="text/javascript">
       var socket = io.connect();
+      jqconsole = $('#console').jqconsole('Hi\n', '>>> ');
+      var startPrompt = function () {
+        // Start the prompt with history enabled.
+        jqconsole.Prompt(true, function (input) {
+          socket.emit("code", {"code": input})
+          // Restart the prompt.
+          startPrompt();
+        });
+      };
 
       socket.on("ready", function(data) {
         console.log(data);
@@ -25,8 +34,15 @@
 
       socket.on("result", function(data) {
         console.log(data);
+        jqconsole.Write(data.result + '\n', 'jqconsole-output');
       });
 
+      $("#exec-code").click(function(e) {
+        var code = editor.session.getTextRange(editor.getSelectionRange()).trim();
+        jqconsole.Write(code + "\n\n", 'jqconsole-input');
+        return false;
+      });
+      
     </script>
     </body>
 </html>
