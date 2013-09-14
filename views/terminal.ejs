@@ -83,6 +83,9 @@
       socket.on("result", function(data) {
           console.log(data);
       });
+      socket.on("ready", function(data) {
+          console.log(data);
+      });
       $(function () {
       	jqconsole = $('#console').jqconsole('Hi\n', '>>> ');
         
