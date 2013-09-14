@@ -52,7 +52,7 @@ io.sockets.on("connection", function(socket) {
     socket.containerid = $(createContainer);
 
     socket.emit('ready', { id: socket.containerid, status: "provisioned" }) ;
-    console.log(socket.containerid);
+    console.log("come one down: " + socket.containerid);
     
     socket.on("code", function(data) {
 
