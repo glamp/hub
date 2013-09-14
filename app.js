@@ -49,11 +49,11 @@ io.sockets.on("connection", function(socket) {
     port += 1;
     socket.port = port;
     var createContainer = "sudo docker run -p " + port + ":3000 -d pythonenv"
-    socket.id = $(createContainer);
+    socket.containerid = $(createContainer);
 
-    //socket.emit('ready', { id: socket.id, status: "provisioned" }) ;
+    //socket.emit('ready', { id: socket.containerid, status: "provisioned" }) ;
     
-    console.log(socket.id);
+    console.log(socket.containerid);
     
     socket.on("code", function(data) {
 
@@ -87,12 +87,12 @@ io.sockets.on("connection", function(socket) {
     });
 
     socket.on("disconnect", function() {
-        var killContainer = "sudo docker kill " + socket.id;
+        var killContainer = "sudo docker kill " + socket.containerid;
         exec(killContainer, function(err, stdout, stderr) {
             if (err) {
-                console.log("error killing container for: " + socket.id);
+                console.log("error killing container for: " + socket.containerid);
             } else {
-                console.log(socket.id + " has left the building!");
+                console.log(socket.containerid + " has left the building!");
             }
         });
     });
