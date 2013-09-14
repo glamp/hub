@@ -10,6 +10,9 @@
     "ejs": "*",
     "underscore": "~1.5.2",
     "socket.io": "~0.9.16",
-    "uuid": "~1.4.1"
+    "uuid": "~1.4.1",
+    "requestify": "~0.1.15",
+    "socket.io-client": "~0.9.16",
+    "shellscript": "~0.1.0"
   }
 }
