@@ -6,7 +6,7 @@
     <script src="http://code.jquery.com/jquery-1.8.0.min.js"></script>
     <script src="/javascripts/jconsole.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="/socket.io/socket.io.js" type="text/javascript" charset="utf-8"></script>
-    <link href=/styleshseets/styles.css rel="stylesheet" type="text/css">
+    <link href=/stylesheets/style.css rel="stylesheet" type="text/css">
   </head>
 
 
@@ -16,48 +16,48 @@
   		<button id="exec-code">Send</button>
   	</div>
     <script type="text/javascript">
-      var socket = io.connect();
+      $(document).ready(function(){
+          var socket = io.connect();
 
-      socket.on("connect", function() {
+          socket.on("connect", function() {
 
-      	socket.on("ready", function(data) {
-      		console.log(data);
-      	});
-      	
-      	socket.on("result", function(data) {
-      		console.log(data);
-      		jqconsole.Write(data.result + '\n', 'jqconsole-output');
-      	});
-      
-      });
-
-      $(function () {
-      	jqconsole = $('#console').jqconsole('Hi\n', '>>> ');
-        
-        var startPrompt = function () {
-          // Start the prompt with history enabled.
-          jqconsole.Prompt(true, function (input) {
-            socket.emit("code", {"code": input})
-            // Restart the prompt.
-            startPrompt();
+            socket.on("ready", function(data) {
+                console.log(data);
+            });
+            
+            socket.on("result", function(data) {
+                console.log(data);
+                jqconsole.Write(data.result + '\n', 'jqconsole-output');
+            });
+          
           });
-        };
-        socket.on("blah", function(data) {
-            console.log(data);
-            jqconsole.Write(data.result + '\n', 'jqconsole-output');
-            //startPrompt();
-        });
-        startPrompt();
 
-        $("#exec-code").click(function(e) {
-        	e.preventDefault();
-        	var code = editor.session.getTextRange(editor.getSelectionRange()).trim();
-        	console.log(code);
-        	jqconsole.Write(code + "\n\n", 'jqconsole-input');
-        	return false;
-        })
-       });
+            jqconsole = $('#console').jqconsole('Hi\n', '>>> ');
+            
+            var startPrompt = function () {
+              // Start the prompt with history enabled.
+              jqconsole.Prompt(true, function (input) {
+                socket.emit("code", {"code": input})
+                // Restart the prompt.
+                startPrompt();
+              });
+            };
+            socket.on("blah", function(data) {
+                console.log(data);
+                jqconsole.Write(data.result + '\n', 'jqconsole-output');
+                //startPrompt();
+            });
+            startPrompt();
+
+            $("#exec-code").click(function(e) {
+                e.preventDefault();
+                var code = editor.session.getTextRange(editor.getSelectionRange()).trim();
+                console.log(code);
+                jqconsole.Write(code + "\n\n", 'jqconsole-input');
+                return false;
+            })
+    });
     </script>
-	
-	</body>
+    
+</body>
 </html>

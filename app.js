@@ -43,7 +43,7 @@ server.listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });
 
-var io = require('socket.io').listen(server, { log: false })
+var io = require('socket.io').listen(server);
 
 io.sockets.on("connection", function(socket) {
     port += 1;
@@ -56,6 +56,7 @@ io.sockets.on("connection", function(socket) {
     console.log(socket.id);
     
     socket.on("code", function(data) {
+
         console.log(data);
         var payload = JSON.stringify(data);
         var options = {
@@ -78,7 +79,7 @@ io.sockets.on("connection", function(socket) {
                  var result = JSON.parse(responseString);
                  console.log(result);
                  console.log("why is this not emitting?");
-                 socket.emit("result", result);
+                 socket.emit("result", JSON.stringify(result));
              });
         });
         req.write(payload);
