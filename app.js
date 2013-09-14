@@ -34,7 +34,7 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-app.get('/:lang', function(req, res) {
+app.get('/', function(req, res) {
     var lang = req.params.lang || "python";
     res.render("terminal");
 });
@@ -47,14 +47,16 @@ server.listen(app.get('port'), function(){
 var io = require('socket.io').listen(server);
 
 io.sockets.on("connection", function(socket) {
-    port += 1;
-    socket.port = port;
-    var createContainer = "sudo docker run -p " + port + ":3000 -d pythonenv"
-    socket.containerid = $(createContainer);
+    socket.on("setupenv", function(data) {
+        port += 1;
+        socket.port = port;
+        var createContainer = "sudo docker run -p " + port + ":3000 -d n2sci"
+        var createContainer = "sudo docker run -p " + port + ":3000 -d n2sci /usr/bin/node2sci /node-sci " + data.lang;
+        socket.containerid = $(createContainer);
 
-    socket.emit('ready', { id: socket.containerid, status: "provisioned" }) ;
-    console.log("come one down: " + socket.containerid);
-    
+        socket.emit('ready', { id: socket.containerid, status: "provisioned", lang: data.lang }) ;
+        console.log("come one down: " + socket.containerid);
+    });
     socket.on("code", function(data) {
 
         console.log(data);

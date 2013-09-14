@@ -11,7 +11,14 @@
 
 
   <body>
-  	<div id="parent" style="height: 600px;">
+    <form id="lang-form">
+        <select id="lang">
+            <option value="r">R</option>
+            <option value="python">Python</option>
+        </select>
+        <input type="submit" value="Launch">
+  	</form>
+    <div id="parent" style="height: 600px;">
 	  	<div id="console"></div>
   		<button id="exec-code">Send</button>
   	</div>
@@ -41,8 +48,11 @@
         jqconsole.Write(code + "\n\n", 'jqconsole-input');
         return false;
       });
-    
-    startPrompt();  
+      $("#lang-form").submit(function(e) {
+          socket.emit("setupenv", { lang: $("#lang").val() });    
+          startPrompt();  
+          e.preventDefault();
+      });
     </script>
     </body>
 </html>
