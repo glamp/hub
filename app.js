@@ -35,8 +35,11 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', function(req, res) {
-    var lang = req.params.lang || "python";
     res.render("terminal");
+});
+
+app.get('/test', function(req, res) {
+    res.render("test");
 });
 
 var server = require('http').createServer(app);

@@ -24,8 +24,9 @@
   	</div>
 
     <script type="text/javascript">
-      $("#parent").hide();
-      var socket = io.connect();
+      // $("#parent").hide();
+      // var socket = io.connect();
+
       jqconsole = $('#console').jqconsole('\n', ">>> ", "...");
       var startPrompt = function () {
         if ($("#lang").val()=="r") {
@@ -33,7 +34,7 @@
         }
         // Start the prompt with history enabled.
         jqconsole.Prompt(true, function (input) {
-          socket.emit("code", {"code": input})
+          // socket.emit("code", {"code": input})
           // Restart the prompt.
           startPrompt();
         });
@@ -54,13 +55,13 @@
 
       startPrompt();
 
-      socket.on("ready", function(data) {
-        console.log(data);
-      });
+      // socket.on("ready", function(data) {
+      //   console.log(data);
+      // });
 
-      socket.on("result", function(data) {
-        jqconsole.Write(data.result + '\n', 'jqconsole-output');
-      });
+      // socket.on("result", function(data) {
+      //   jqconsole.Write(data.result + '\n', 'jqconsole-output');
+      // });
 
       $("#exec-code").click(function(e) {
         var code = editor.session.getTextRange(editor.getSelectionRange()).trim();
