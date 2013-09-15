@@ -44,14 +44,23 @@ server.listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });
 
-var io = require('socket.io').listen(server);
+var io = require('socket.io').listen(server, { log: false });
 
 io.sockets.on("connection", function(socket) {
     socket.on("setupenv", function(data) {
+        if (socket.containerid != undefined) {
+            var killContainer = "sudo docker kill " + socket.containerid;
+            exec(killContainer, function(err, stdout, stderr) {
+                if (err) {
+                    console.log("error killing container for: " + socket.containerid);
+                } else {
+                    console.log(socket.containerid + " changed languages!");
+                }
+            });
+        }
         port += 1;
         socket.port = port;
-        var createContainer = "sudo docker run -p " + port + ":3000 -d n2sci"
-        var createContainer = "sudo docker run -p " + port + ":3000 -d n2sci /usr/bin/node2sci /node-sci " + data.lang;
+        var createContainer = "sudo docker run -m 10485760 -p " + port + ":3000 -d n2sci /usr/bin/node2sci /node-sci " + data.lang;
         socket.containerid = $(createContainer);
 
         socket.emit('ready', { id: socket.containerid, status: "provisioned", lang: data.lang }) ;
@@ -96,5 +105,5 @@ io.sockets.on("connection", function(socket) {
             }
         });
     });
-});
+    });
 

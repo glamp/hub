@@ -24,6 +24,7 @@
   	</div>
 
     <script type="text/javascript">
+      $("#parent").hide();
       var socket = io.connect();
       jqconsole = $('#console').jqconsole('Hi\n', '>>> ');
       var startPrompt = function () {
@@ -50,7 +51,9 @@
       });
       $("#lang-form").submit(function(e) {
           socket.emit("setupenv", { lang: $("#lang").val() });    
-          startPrompt();  
+          jqconsole.Reset(); 
+          startPrompt();
+          $("#parent").show();
           e.preventDefault();
       });
     </script>
