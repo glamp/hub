@@ -47,15 +47,6 @@
       jqconsole = $('#console').jqconsole("\n", ">>> ", "...");
 
       var startPrompt = function () {
-        if ($("#lang").val()=="r") {
-          jqconsole = $('#console').jqconsole('\n', ">>> ", "...");
-          jqconsole.SetPromptLabel("> ", "+ ");
-          //jqconsole.Write(rgreeting, 'jqconsole-output');
-        } else {
-          jqconsole = $('#console').jqconsole('\n', ">>> ", "...");
-          //jqconsole.Write(pygreeting, 'jqconsole-output');
-        }
-
         // Start the prompt with history enabled.
         jqconsole.Prompt(true, function (input) {
           socket.emit("code", {"code": input})
@@ -95,6 +86,15 @@
       $("#lang-form").submit(function(e) {
           socket.emit("setupenv", { lang: $("#lang").val() });    
           jqconsole.Reset(); 
+          if ($("#lang").val()=="r") {
+            // jqconsole = $('#console').jqconsole('\n', ">>> ", "...");
+            jqconsole.SetPromptLabel("> ", "+ ");
+            jqconsole.Write(rgreeting, 'jqconsole-output');
+          } else {
+            // jqconsole = $('#console').jqconsole('\n', ">>> ", "...");
+            jqconsole.SetPromptLabel(">>> ", "...");
+            jqconsole.Write(pygreeting, 'jqconsole-output');
+          }
           startPrompt();
           $("#parent").show();
           e.preventDefault();

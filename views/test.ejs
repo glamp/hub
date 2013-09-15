@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="http://code.jquery.com/jquery-1.8.0.min.js"></script>
     <!-- Bootstrap -->
-    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <!-- <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen"> -->
     <script src="/javascripts/jconsole.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="/socket.io/socket.io.js" type="text/javascript" charset="utf-8"></script>
     <!-- Console -->
@@ -16,8 +16,8 @@
 
 
   <body>
-    <div class="conatainer">
-      <div class="row-fluid">
+<!--     <div class="conatainer">
+      <div class="row">
         <div class="span1"></div>
         <div class="span11">
           <form id="lang-form">
@@ -26,20 +26,20 @@
                   <option value="python">Python</option>
               </select>
               <input type="submit" value="Launch">
-        	</form>
+          </form>
         </div>
       </div>
-      <div class="row-fluid">
-        <div class="span1"></div>
-        <div id="parent" class="span6" style="height: 800px;">
-    	  	<div id="console"></div>
-      		<button id="exec-code">Send</button>
-      	</div>
+      <div class="row">
+        <div class="span1"></div> -->
+        <div id="parent" class="span10" style="height: 800px;">
+          <div id="console"></div>
+          <button id="exec-code">Send</button>
+        </div>
 
-        <div class="span5">
+   <!--      <div class="span1">
         </div>
       </div>
-    </div>
+    </div> -->
 
     <script type="text/javascript">
       // $("#parent").hide();
@@ -47,12 +47,6 @@
       jqconsole = $('#console').jqconsole("\n", ">>> ", "...");
 
       var startPrompt = function () {
-        if ($("#lang").val()=="r") {
-          jqconsole = $('#console').jqconsole(rgreeting, ">>> ", "...");
-          jqconsole.SetPromptLabel("> ", "+ ");
-        } else {
-          jqconsole = $('#console').jqconsole(pygreeting, ">>> ", "...");
-        }
         // Start the prompt with history enabled.
         jqconsole.Prompt(true, function (input) {
           // socket.emit("code", {"code": input})
@@ -90,8 +84,15 @@
         return false;
       });
       $("#lang-form").submit(function(e) {
-          socket.emit("setupenv", { lang: $("#lang").val() });    
-          jqconsole.Reset(); 
+          // socket.emit("setupenv", { lang: $("#lang").val() });    
+          jqconsole.Reset();
+          if ($("#lang").val()=="r") {
+            jqconsole.SetPromptLabel("> ", "+ ");
+            //jqconsole.Write(rgreeting, 'jqconsole-output');
+          } else {
+            jqconsole = $('#console').jqconsole('\n', ">>> ", "...");
+            //jqconsole.Write(pygreeting, 'jqconsole-output');
+          }
           startPrompt();
           $("#parent").show();
           e.preventDefault();
