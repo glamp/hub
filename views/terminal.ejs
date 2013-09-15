@@ -48,10 +48,12 @@
 
       var startPrompt = function () {
         if ($("#lang").val()=="r") {
-          jqconsole = $('#console').jqconsole(rgreeting, ">>> ", "...");
+          jqconsole = $('#console').jqconsole('\n', ">>> ", "...");
           jqconsole.SetPromptLabel("> ", "+ ");
+          jqconsole.Write(rgreeting, 'jqconsole-input');
         } else {
-          jqconsole = $('#console').jqconsole(pygreeting, ">>> ", "...");
+          jqconsole = $('#console').jqconsole('\n', ">>> ", "...");
+          jqconsole.Write(pygreeting, 'jqconsole-input');
         }
 
         // Start the prompt with history enabled.
