@@ -18,6 +18,7 @@ a {
 .jqconsole {
     padding: 10px;
     font-size: 14px;
+    background-color: black;
 }
 /* The cursor. */
 .jqconsole-cursor {
