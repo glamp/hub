@@ -30,6 +30,8 @@
       var startPrompt = function () {
         if ($("#lang").val()=="r") {
           jqconsole.SetPromptLabel("> ", "+ ");
+        } else {
+            jqconsole.SetPromptLabel(">>> ", "...");
         }
         // Start the prompt with history enabled.
         jqconsole.Prompt(true, function (input) {
