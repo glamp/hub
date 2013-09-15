@@ -60,7 +60,7 @@ io.sockets.on("connection", function(socket) {
         }
         port += 1;
         socket.port = port;
-        var createContainer = "sudo docker run -c 0.05 -m 10485760 -p " + port + ":3000 -d n2sci /usr/bin/node2sci /node-sci " + data.lang;
+        var createContainer = "sudo docker run -p " + port + ":3000 -d n2sci /usr/bin/node2sci /node-sci " + data.lang;
         socket.containerid = $(createContainer);
 
         socket.emit('ready', { id: socket.containerid, status: "provisioned", lang: data.lang }) ;
