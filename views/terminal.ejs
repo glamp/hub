@@ -26,10 +26,10 @@
     <script type="text/javascript">
       $("#parent").hide();
       var socket = io.connect();
-      jqconsole = $('#console').jqconsole('\n', ">>> ", "...");
+      jqconsole = $('#console').jqconsole("\n", ">>> ", "...");
       var startPrompt = function () {
         if ($("#lang").val()=="r") {
-          jqconsole.SetPromptLabel("> ", "+ ");
+            jqconsole.SetPromptLabel("> ", "+ ");
         } else {
             jqconsole.SetPromptLabel(">>> ", "...");
         }
