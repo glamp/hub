@@ -30,14 +30,17 @@
         </div>
       </div>
       <div class="row">
+        
         <div class="span1"></div>
-        <div id="parent" class="span6" style="height: 800px;">
+        
+        <div id="parent" class="span10" style="height: 800px;">
           <div id="console"></div>
           <button id="exec-code">Send</button>
         </div>
-
-        <div class="span5">
+        
+        <div class="span1">
         </div>
+
       </div>
     </div>
 
@@ -55,19 +58,21 @@
         });
       };
 
-      // settings
-      jqconsole.SetIndentWidth(4);
+      setupConsole = function() {
+          jqconsole.SetIndentWidth(4);
 
-      jqconsole.RegisterShortcut('a', function() {
-        this.MoveToStart();
-      }); 
-      jqconsole.RegisterShortcut('e', function() {
-        this.MoveToEnd();
-      }); 
-      jqconsole.RegisterMatching('{', '}', 'brackets');
-      jqconsole.RegisterMatching('[', ']', 'square-brackets');
-      jqconsole.RegisterMatching('(', ')', 'parens');
-
+          jqconsole.RegisterShortcut('a', function() {
+            this.MoveToStart();
+          }); 
+          jqconsole.RegisterShortcut('e', function() {
+            this.MoveToEnd();
+          }); 
+          jqconsole.RegisterMatching('{', '}', 'brackets');
+          jqconsole.RegisterMatching('[', ']', 'square-brackets');
+          jqconsole.RegisterMatching('(', ')', 'parens');
+      }
+      
+      setupConsole();
       startPrompt();
 
       socket.on("ready", function(data) {
@@ -95,6 +100,7 @@
             jqconsole.SetPromptLabel(">>> ", "...");
             jqconsole.Write(pygreeting, 'jqconsole-output');
           }
+          setupConsole();
           startPrompt();
           $("#parent").show();
           e.preventDefault();

@@ -64,14 +64,13 @@ io.sockets.on("connection", function(socket) {
         port += 1;
         socket.port = port;
         var createContainer = "sudo docker run -p " + port + ":3000 -d n2sci /usr/bin/node2sci /node-sci " + data.lang;
+        console.log(createContainer);
         socket.containerid = $(createContainer);
 
         socket.emit('ready', { id: socket.containerid, status: "provisioned", lang: data.lang }) ;
         console.log("come one down: " + socket.containerid);
     });
     socket.on("code", function(data) {
-
-        console.log(data);
         var payload = JSON.stringify(data);
         var options = {
             host: 'localhost',
