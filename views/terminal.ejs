@@ -96,7 +96,10 @@
             // jqconsole = $('#console').jqconsole('\n', ">>> ", "...");
             jqconsole.SetPromptLabel("> ", "+ ");
             jqconsole.Write(rgreeting, 'jqconsole-output');
-          } else {
+          } else if ($("#lang").val()=="ruby") {
+            jqconsole.SetPromptLabel(">> ", "?> ");
+            jqconsole.Write(rubygreeting, 'jqconsole-output');
+	  } else {
             // jqconsole = $('#console').jqconsole('\n', ">>> ", "...");
             jqconsole.SetPromptLabel(">>> ", "...");
             jqconsole.Write(pygreeting, 'jqconsole-output');
