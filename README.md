@@ -1,7 +1,7 @@
 # moontower.js
 
 
-<img src="moontower.jpg">
+<img src="public/moontower.jpg">
 
 
 ## Build
