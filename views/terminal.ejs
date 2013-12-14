@@ -3,7 +3,7 @@
   <head>
     <title>Yhat</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="http://code.jquery.com/jquery-1.8.0.min.js"></script>
+    <script src="/javascripts/jquery-1.8.0.min.js"></script>
     <!-- Bootstrap -->
     <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <script src="/javascripts/jconsole.min.js" type="text/javascript" charset="utf-8"></script>
@@ -22,9 +22,9 @@
         <div class="span11">
           <form id="lang-form">
               <select id="lang">
-                  <option value="r">R</option>
                   <option value="python">Python</option>
                   <option value="ruby">Ruby</option>
+                  <option value="r">R</option>
               </select>
               <input type="submit" value="Launch">
           </form>
@@ -81,7 +81,8 @@
       });
 
       socket.on("result", function(data) {
-        jqconsole.Write(data.result + '\n', 'jqconsole-output');
+          data = JSON.parse(data);
+          jqconsole.Write(data.result + '\n', 'jqconsole-output');
       });
 
       $("#exec-code").click(function(e) {

@@ -1,9 +1,10 @@
 {
-  "name": "application-name",
+  "name": "moontower.js",
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "is-up": "./system/is-up"
   },
   "dependencies": {
     "express": "3.3.4",
@@ -13,6 +14,7 @@
     "uuid": "~1.4.1",
     "requestify": "~0.1.15",
     "socket.io-client": "~0.9.16",
-    "shellscript": "~0.1.0"
+    "shellscript": "~0.1.0",
+    "ws": "~0.4.31"
   }
 }

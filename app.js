@@ -1,18 +1,18 @@
-
 /**
  * Module dependencies.
  */
 
 var express = require('express')
-  , routes = require('./routes')
   , http = require('http')
-  , Buffer = require('buffer').Buffer
   , path = require('path')
   , uuid = require('uuid')
+  , WebSocket = require('ws')
   , exec = require("child_process").exec;
-require("shellscript").globalize();
 
-var port = 5555;
+require("shellscript").globalize();
+$("sudo docker kill `sudo docker ps | awk '{print $1}'`")
+
+var port = 80;
 
 var app = express();
 
@@ -50,62 +50,57 @@ server.listen(app.get('port'), function(){
 var io = require('socket.io').listen(server, { log: false });
 
 io.sockets.on("connection", function(socket) {
-    socket.on("setupenv", function(data) {
-        if (socket.containerid != undefined) {
-            var killContainer = "sudo docker kill " + socket.containerid;
-            exec(killContainer, function(err, stdout, stderr) {
-                if (err) {
-                    console.log("error killing container for: " + socket.containerid);
-                } else {
-                    console.log(socket.containerid + " changed languages!");
-                }
-            });
-        }
-        port += 1;
-        socket.port = port;
-        var createContainer = "sudo docker run -p " + port + ":3000 -d n2sci /usr/bin/node2sci /node-sci " + data.lang;
-        console.log(createContainer);
-        socket.containerid = $(createContainer);
+  socket.on("setupenv", function(data) {
+    
+    if (socket.containerid!=undefined) {
+      $("sudo docker kill " + socket.containerid);
+    }
 
-        socket.emit('ready', { id: socket.containerid, status: "provisioned", lang: data.lang }) ;
-        console.log("come one down: " + socket.containerid);
-    });
-    socket.on("code", function(data) {
-        var payload = JSON.stringify(data);
-        var options = {
-            host: 'localhost',
-            port: socket.port,
-            path: '/',
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Content-Length': payload.length
-            }
-        };
-        var req = http.request(options, function(res) {
-            res.setEncoding('utf-8');
-            var responseString = '';
-             res.on('data', function(data) {
-                 responseString += data;
-             });
-             res.on('end', function() {
-                 var result = JSON.parse(responseString);
-                 socket.emit("result", result);
-             });
-        });
-        req.write(payload);
-        req.end();
-    });
+    var startShell = "sudo docker run -p 3000 -d -t base/shellington shellington " + data.lang;
+    var cid = $(startShell).trim();
+    var containerIP = $("sudo docker port " + cid + " 3000").trim();
+    socket.containerid = cid;
+    socket.containerIP = containerIP;
 
-    socket.on("disconnect", function() {
-        var killContainer = "sudo docker kill " + socket.containerid;
-        exec(killContainer, function(err, stdout, stderr) {
-            if (err) {
-                console.log("error killing container for: " + socket.containerid);
-            } else {
-                console.log(socket.containerid + " has left the building!");
-            }
-        });
+    // wait until the app is up
+    var isup = path.join(__dirname, "system", "is-up");
+    isup = isup + " " + containerIP;
+    exec(isup, function(err, stdout, stderr) {
+      // open the socket connection
+      socket.ws = new WebSocket("ws://" + containerIP);
+      socket.ws.on('open', function() {
+        console.log("socket connection to " + containerIP + " is open");
+      });
+      socket.ws.on('message', function(message) {
+        socket.emit("result", message);
+      });
+      socket.emit('ready', { id: socket.containerid, status: "provisioned", lang: data.lang }) ;
+      console.log("container started: id=" + cid.slice(0, 7) +"; ip: " + containerIP);
     });
   });
+  
+  socket.on("code", function(data) {
+    var payload = JSON.stringify(data);
+    if (socket.ws.OPEN) {
+      socket.ws.send(payload);
+    } else {
+      console.log("socket is closed");
+    }
+  });
+  socket.on("disconnect", function() {
+    if (socket.ws != undefined) {
+      socket.ws.close();
+      socket.ws = null;
+    }
+    var killContainer = "sudo docker kill " + socket.containerid;
+    console.log("--->" + killContainer);
+    exec(killContainer, function(err, stdout, stderr) {
+      if (err) {
+        console.log("error killing container for: " + socket.containerid);
+      } else {
+        console.log(socket.containerid + " has left the building!");
+      }
+    });
+  });
+});
 
