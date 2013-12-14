@@ -56,7 +56,7 @@ io.sockets.on("connection", function(socket) {
       $("sudo docker kill " + socket.containerid);
     }
 
-    var startShell = "sudo docker run -p 3000 -d -t base/shellington shellington " + data.lang;
+    var startShell = "sudo docker run -p 3000 -d -t glamp/shellington shellington " + data.lang;
     var cid = $(startShell).trim();
     var containerIP = $("sudo docker port " + cid + " 3000").trim();
     socket.containerid = cid;
