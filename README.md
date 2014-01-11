@@ -2,7 +2,7 @@
 
 <blockquote>
 Party at the Moon Tower!
-</blockquote
+</blockquote>
 
 <img src="public/moontower.jpg">
 
